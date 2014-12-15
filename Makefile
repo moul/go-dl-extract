@@ -1,6 +1,6 @@
 build: go-dl-extract-i386
 
-go-dl-extract-i386: Dockerfile wrapper.go
+go-dl-extract-i386: Dockerfile go-dl-extract.go
 	docker build -t go-dl-extract-builder .
 	docker run --name=go-dl-extract-builder go-dl-extract-builder true
 	docker cp go-dl-extract-builder:/gi/bin tmp

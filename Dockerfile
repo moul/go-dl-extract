@@ -1,4 +1,4 @@
-FROM armbuild/golang:1.3-cross
+FROM golang:1.3-cross
 
 ENV CGO_ENABLED 0
 ADD go-dl-extract.go /go/
