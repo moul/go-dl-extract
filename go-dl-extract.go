@@ -6,7 +6,9 @@ import (
 )
 
 func main() {
-	var url = flag.String("url", "", "help message for flagname")
+	url := ""
+	flag.StringVar(&url, "url", "", "help message for flagname")
+	flag.Parse()
 	fmt.Printf("url: %s\n", url)
 
 	/*
