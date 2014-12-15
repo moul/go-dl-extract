@@ -35,5 +35,7 @@ func main() {
 		panic(err)
 	}
 
-	archive.Untar("tmp.tar", "tmp")
+	nf, err := os.Open("tmp.tar")
+	defer nf.Close()
+	archive.Untar(nf, "tmp", nil)
 }

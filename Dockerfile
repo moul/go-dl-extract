@@ -17,7 +17,7 @@ ADD . /go/
 
 # Compile the binary and statically link
 RUN cd $APP_DIR && GOOS=darwin GOARCH=amd64          godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-darwin-amd64
-RUN cd $APP_DIR && GOOS=linux  GOARCH=amd64          godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-amd64
-RUN cd $APP_DIR && GOOS=linux  GOARCH=386            godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-i386
-RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=5  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armel
-RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=6  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armhf
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=amd64          godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-amd64
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=386            godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-i386
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=5  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armel
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=6  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armhf
