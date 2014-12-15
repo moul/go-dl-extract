@@ -2,7 +2,7 @@ build: go-dl-extract-osx
 
 go-dl-extract-osx: Dockerfile go-dl-extract.go
 	docker build -t go-dl-extract-builder .
-	-docker rm go-dl-extract-builder || true
+	-docker rm go-dl-extract-builder || true 2>/dev/null
 	docker run --name=go-dl-extract-builder go-dl-extract-builder true
 	docker cp go-dl-extract-builder:/go/bin tmp
 	docker rm go-dl-extract-builder

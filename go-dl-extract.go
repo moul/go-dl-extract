@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/docker/docker/pkg/archive"
 )
 
 /* FIXME:
@@ -21,7 +23,8 @@ func main() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	f, err := os.Create("my.tar.gz")
+
+	f, err := os.Create("tmp.tar")
 	if err != nil {
 		panic(err)
 	}
@@ -31,4 +34,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	archive.Untar("tmp.tar", "tmp")
 }

@@ -1,10 +1,23 @@
 FROM golang:1.3-cross
 
 ENV CGO_ENABLED 0
-ADD go-dl-extract.go /go/
 
-RUN GOOS=darwin GOARCH=amd64          go build -v -ldflags -d -o /go/bin/go-dl-extract-osx
-#RUN GOOS=linux  GOARCH=amd64          go build -v -ldflags -d -o /go/bin/go-dl-extract-amd64
-#RUN GOOS=linux  GOARCH=386            go build -v -ldflags -d -o /go/bin/go-dl-extract-i386
-#RUN GOOS=linux  GOARCH=arm   GOARM=5  go build -v -ldflags -d -o /go/bin/go-dl-extract-armel
-#RUN GOOS=linux  GOARCH=arm   GOARM=6  go build -v -ldflags -d -o /go/bin/go-dl-extract-armhf
+# Install Godep for vendoring
+RUN go get github.com/tools/godep
+# Recompile the standard library without CGO
+RUN go install -a std
+
+# Declare the maintainer
+MAINTAINER Manfred Touron @moul
+
+# For convenience, set an env variable with the path of the code
+ENV APP_DIR /go
+
+ADD . /go/
+
+# Compile the binary and statically link
+RUN cd $APP_DIR && GOOS=darwin GOARCH=amd64          godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-darwin-amd64
+RUN cd $APP_DIR && GOOS=linux  GOARCH=amd64          godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-amd64
+RUN cd $APP_DIR && GOOS=linux  GOARCH=386            godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-i386
+RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=5  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armel
+RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=6  godep go build -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-linux-armhf
