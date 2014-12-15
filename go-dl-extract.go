@@ -2,19 +2,21 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
 )
 
-func main() {
-	url := ""
-	flag.StringVar(&url, "url", "", "help message for flagname")
-	flag.Parse()
-	fmt.Printf("url: %s\n", url)
+/* FIXME:
+- verbose flag
+- .xz, .gz, .bz2 uncompression
+*/
 
-	resp, err := http.Get(url)
+func main() {
+	url := flag.String("url", "", "help message for flagname")
+	flag.Parse()
+
+	resp, err := http.Get(*url)
 	if err != nil {
 		panic(err)
 	}
