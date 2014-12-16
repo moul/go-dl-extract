@@ -28,7 +28,7 @@ func init() {
 	flag.BoolVar(&verbose, "v", false, "Verbose")
 	flag.StringVar(&dest, "dest", "/", "Destination path")
 	flag.StringVar(&excludes, "excludes",
-		"sys|etc/hosts|etc/resolv.conf|proc", "Excludes")
+		"sys|etc/hosts|etc/resolv.conf|proc|etc/hostname", "Excludes")
 	tmptar = "/tmp.tar"
 
 	flag.CommandLine.Parse(strings.Split(is_bin_sh, " "))
