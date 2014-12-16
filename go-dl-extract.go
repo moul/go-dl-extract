@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -18,6 +17,7 @@ var verbose bool
 var dest string
 var tmptar string
 var is_bin_sh string
+var excludes string
 
 func init() {
 	// flags
@@ -27,6 +27,8 @@ func init() {
 	flag.StringVar(&url, "url", "", "help message for flagname")
 	flag.BoolVar(&verbose, "v", false, "Verbose")
 	flag.StringVar(&dest, "dest", "/", "Destination path")
+	flag.StringVar(&excludes, "excludes",
+		"sys|etc/hosts|etc/resolv.conf|proc", "Excludes")
 	tmptar = "/tmp.tar"
 
 	flag.CommandLine.Parse(strings.Split(is_bin_sh, " "))
@@ -78,26 +80,16 @@ func main() {
 
 	// Extract
 	log.Debugf("Extracting '%s' to '%s'", tmptar, dest)
-	nf, err := os.Open(tmptar)
+	f, err = os.Open(tmptar)
 	if err != nil {
 		panic(err)
 	}
-	defer nf.Close()
+	defer f.Close()
 
-	fi, err := os.Stat("/bin/sh")
+	err = archive.Untar(f, dest, &archive.TarOptions{
+		Excludes: strings.Split(excludes, "|"),
+	})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(fi.Size())
-
-	err2 := archive.Untar(nf, dest, nil)
-	if err2 != nil {
-		panic(err2)
-	}
-
-	fi2, err := os.Stat("/bin/sh")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(fi2.Size())
 }
