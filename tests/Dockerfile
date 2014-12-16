@@ -1,3 +1,5 @@
 FROM scratch
-ADD go-dl-extract-linux-amd64 /bin/sh
-RUN /bin/sh --url=http://localhost:8989/busybox-1.22.1.tar.gz
+ADD go-dl-extract-Linux-x86_64 /bin/sh
+RUN ADD http://192.168.59.3:8989/busybox-1.22.1.tar.gz /
+RUN -v -url="http://192.168.59.3:8989/busybox-1.22.1.tar.gz"
+RUN -v -url=http://192.168.59.3:8989/busybox-1.22.1.tar.gz COUCOU
