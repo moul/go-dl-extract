@@ -12,21 +12,19 @@ import (
 	"github.com/docker/docker/pkg/units"
 )
 
-/* FIXME:
-- .xz, .gz, .bz2 uncompression
-- stream curl and untar: remove intermediate .tar
-*/
-
 func useless() {
 	// Hacking godep, this package is needed for cross-compile on Linux
 	units.HumanSize(42)
 }
 
+// Usage in a Dockerfile:
+//   RUN {URL}
+//   RUN ADD {URL} /
+//   RUN -v -url={URL}
 func main() {
+	// Parsing
 	is_bin_sh := flag.String("c", "", "Is $0 /bin/sh ?")
 	flag.Parse()
-
-	fmt.Println("is_bin_sh", *is_bin_sh)
 
 	url := flag.String("url", "", "help message for flagname")
 	verbose := flag.Bool("v", false, "Verbose")
@@ -34,38 +32,41 @@ func main() {
 	tmptar := "tmp.tar"
 
 	flag.CommandLine.Parse(strings.Split(*is_bin_sh, " "))
+	if len(flag.Args()) > 0 && len(*url) == 0 {
+		url = &flag.Args()[0]
+	}
 
-	fmt.Println("verbose:", *verbose)
-	fmt.Println("url:", *url)
-	fmt.Println("dest:", *dest)
-	fmt.Println("tail:", flag.Args())
-	return
+	if *verbose {
+		fmt.Println("verbose:", *verbose)
+		fmt.Println("url:", *url)
+		fmt.Println("dest:", *dest)
+		fmt.Println("tail:", flag.Args())
+	}
 
-	/*
-		if *verbose && *is_bin_sh {
-			fmt.Println("$0 is /bin/sh")
-		}
-		fmt.Println(os.Args)
-	*/
-
+	// Get
 	resp, err := http.Get(*url)
 	if err != nil {
 		panic(err)
 	}
 	defer resp.Body.Close()
 
+	// Create the tarball locally
 	f, err := os.Create(tmptar)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
+	// Fill the tarball
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
 		panic(err)
 	}
 
+	// Open the tarball
 	nf, err := os.Open(tmptar)
 	defer nf.Close()
+
+	// Extract the tarball
 	archive.Untar(nf, *dest, nil)
 }
