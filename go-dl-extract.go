@@ -9,13 +9,8 @@ import (
 	"strings"
 
 	"github.com/docker/docker/pkg/archive"
-	"github.com/docker/docker/pkg/units"
+	_ "github.com/docker/docker/pkg/units" // Required for godep
 )
-
-func useless() {
-	// Hacking godep, this package is needed for cross-compile on Linux
-	units.HumanSize(42)
-}
 
 // Usage in a Dockerfile:
 //   RUN {URL}
