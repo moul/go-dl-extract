@@ -5,3 +5,4 @@ dist/
 Godeps/
 .build
 tests/go-dl-extract-*
+tests/ssl.tar
