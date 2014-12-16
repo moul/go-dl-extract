@@ -7,6 +7,7 @@ SRCS = go-dl-extract.go
 build:	dist/$(HOST_BIN)
 
 .build:	Dockerfile Godeps
+	@echo
 	@rm -f .build
 	docker build -t $(BUILDER) .
 	docker inspect -f '{{.Id}}' $(BUILDER) > .build
@@ -17,6 +18,7 @@ Godeps:	$(SRCS)
 
 dist/$(TEST_BIN):	dist/$(HOST_BIN)
 dist/$(HOST_BIN):	.build
+	@echo
 	@docker rm $(BUILDER) 2>/dev/null || true
 	docker run --name=$(BUILDER) $(BUILDER) true
 	docker cp $(BUILDER):/go/bin tmp
@@ -30,5 +32,6 @@ fclean:	clean
 	rm -rf dist/
 
 test:	dist/$(TEST_BIN)
+	@echo
 	cp dist/$(TEST_BIN) tests/
 	$(MAKE) -C tests/ test BINARY=$(TEST_BIN)
