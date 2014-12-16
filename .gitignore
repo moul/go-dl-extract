@@ -1,4 +1,7 @@
-go-dl-extract-*
 *~
 *#
 .#*
+dist/
+Godeps/
+.build
+tests/go-dl-extract-*

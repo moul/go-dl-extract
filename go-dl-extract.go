@@ -7,12 +7,18 @@ import (
 	"os"
 
 	"github.com/docker/docker/pkg/archive"
+	"github.com/docker/docker/pkg/units"
 )
 
 /* FIXME:
 - verbose flag
 - .xz, .gz, .bz2 uncompression
 */
+
+func useless() {
+	// Hacking godep, this package is needed for cross-compile on Linux
+	units.HumanSize(42)
+}
 
 func main() {
 	url := flag.String("url", "", "help message for flagname")
