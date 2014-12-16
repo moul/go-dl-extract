@@ -13,6 +13,7 @@ build:	dist/$(HOST_BIN)
 	docker inspect -f '{{.Id}}' $(BUILDER) > .build
 
 Godeps: #$(SRCS)
+	godep get
 	godep save
 	touch Godeps
 
@@ -20,6 +21,7 @@ dist/$(TEST_BIN):	dist/$(HOST_BIN)
 dist/$(HOST_BIN):	.build
 	@echo
 	@docker rm $(BUILDER) 2>/dev/null || true
+	mkdir -p dist
 	docker run --name=$(BUILDER) $(BUILDER) tar -cf - /etc/ssl > dist/ssl.tar
 	docker cp $(BUILDER):/go/bin tmp
 	docker rm $(BUILDER)
