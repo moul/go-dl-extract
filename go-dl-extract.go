@@ -1,7 +1,10 @@
 package main
 
 import (
+	"crypto/md5"
 	"flag"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -68,11 +71,17 @@ func main() {
 	}
 	defer resp.Body.Close()
 
+	// Checksum
+	h := md5.New()
+	t := io.TeeReader(resp.Body, h)
+
 	// Extracting
-	err = archive.Untar(resp.Body, dest, &archive.TarOptions{
+	err = archive.Untar(t, dest, &archive.TarOptions{
 		Excludes: strings.Split(excludes, "|"),
 	})
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Printf("MD5 checksum: %x", h.Sum(nil))
 }
