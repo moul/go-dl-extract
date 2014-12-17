@@ -17,9 +17,9 @@ import (
 var url string
 var verbose bool
 var dest string
-var tmptar string
 var is_bin_sh string
 var excludes string
+var wanted_checksum string
 
 func init() {
 	// flags
@@ -33,7 +33,8 @@ func init() {
 	flag.StringVar(&dest, "dest", "/", "Destination path")
 	flag.StringVar(&excludes, "Excluded files (separated by a pipe)",
 		"sys|etc/hosts|etc/resolv.conf|proc|etc/hostname", "Excludes")
-	tmptar = "/tmp.tar"
+	flag.StringVar(&wanted_checksum, "md5", "",
+		"If set, will raise an error if the checksums differ")
 
 	flag.CommandLine.Parse(strings.Split(is_bin_sh, " "))
 	if len(flag.Args()) > 0 && len(url) == 0 {
@@ -64,7 +65,7 @@ func init() {
 //   RUN -v -url={URL}
 func main() {
 	// Download
-	log.Debugf("Downloading '%s' to '%s'", url, tmptar)
+	log.Debugf("Downloading '%s'", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
@@ -83,5 +84,14 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("MD5 checksum: %x", h.Sum(nil))
+	if len(wanted_checksum) > 0 {
+		if wanted_checksum == fmt.Sprintf("%x", h.Sum(nil)) {
+			fmt.Printf("MD5 checksum: %x (matches)\n", h.Sum(nil))
+		} else {
+			fmt.Printf("MD5 checksums differ, it is %x and it should be %s\n", h.Sum(nil), wanted_checksum)
+			os.Exit(-1)
+		}
+	} else {
+		fmt.Printf("MD5 checksum: %x", h.Sum(nil))
+	}
 }
