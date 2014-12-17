@@ -1,16 +1,64 @@
 go-dl-extract
 =============
 
-The goal of this project is to create a minimal image that support and `ADD` and `extract` of a remote tarball.
+A static binary that mimics the `ADD and extract` Dockerfile's command for
+remote tarballs.
+
+Usage
+-----
+
+    FROM moul/go-dl-extract
+    MAINTAINER Manfred Touron <m@42.am> (@moul)
+    # by inheriting the moul/go-dl-extract, the first RUN means a remote ADD
+    RUN http://archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
+    CMD ["/bin/sh"]
 
 Context
 -------
 
-The way to create a trusted build of distribution is to put the tarball in a Github repos and a Dockerfile that ADDs the tarball locally.
+The way to create a distribution image is to `ADD` a local tarball to a
+`FROM scratch` Dockerfile.
 
-But Github blocks the files with a length > 100Mb
+The way to create a **trusted** ditribution image is to put the tarball in the
+Github repository with the Dockerfile.
+Github prevents the files >100MB to be uploaded.
 
-Since [this PR](https://github.com/docker/docker/pull/4193), we cannot ADD and untar a tarball using the URL
+During a short period, the `ADD` command was also extracting remote tarballs,
+but it changed with [this PR](https://github.com/docker/docker/pull/4193).
+
+Security note
+-------------
+
+The main advantage to keep the tarball in the Github repository is to create a
+really trusted build that will always give the same result.
+
+We can improve this code by adding :
+
+- a systematic checksum calculation and printing (that will be kept in the
+Docker trusted build report)
+- an optional checksum argument that will raise an error if the checksums differ
+
+Cross platform
+--------------
+
+This project was built using the `golang:1.3-cross` image and was cross-compiled
+for 5 systems and architectures (Docker images availables):
+
+System | Architecture | Docker image size | Comment                 | Docker image
+-------|--------------|-------------------|-------------------------|----------------------------------
+Darwin | x86_64       | 5.8MB             | Works with boot2docker  | moul/go-dl-extract:Darwin-x86_64
+Linux  | x86_64       | 5.4MB             | Also `latest` tag       | moul/go-dl-extract:Linux-x86_64
+Linux  | i386         | 4.4MB             |                         | moul/go-dl-extract:Linux-i386
+Linux  | armel        | 4.4MB             |                         | moul/go-dl-extract:Linux-armel
+Linux  | armhf        | 4.4MB             | Works on Online-Labs C1 | moul/go-dl-extract:Linux-armhf
+
+The compiled binaries are also available in the
+[dist](https://github.com/moul/go-dl-extract/tree/dist/dist) branch.
+
+Dependents
+----------
+
+- trusted [armbuild/archlinux-disk](https://registry.hub.docker.com/u/armbuild/archlinux-disk/dockerfile/) image
 
 Related links
 -------------
