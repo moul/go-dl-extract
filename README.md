@@ -57,6 +57,52 @@ Linux  | armhf        | 4.4MB             | Works on Online-Labs C1 | moul/go-dl
 The compiled binaries are also available in the
 [dist](https://github.com/moul/go-dl-extract/tree/dist/dist) branch.
 
+Example (with [archlinux-disk](https://registry.hub.docker.com/u/armbuild/archlinux-disk/))
+-------------------------------------------------------------------------------------------
+
+Dockerfile:
+
+    FROM moul/go-dl-extract
+    MAINTAINER Manfred Touron <m@42.am> (@moul)
+    # by inheriting the moul/go-dl-extract, the first RUN means a remote ADD
+    RUN --md5=cd5567f945366fd4bda65700d139fbbd http://archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
+    CMD ["/bin/bash"]
+
+Trusted build logs:
+
+    Step 0 : FROM moul/go-dl-extract 
+    Pulling image (latest) from moul/go-dl-extract, endpoint: https://registry-1.docker.io/v1/ f282d2dd8f61
+    Download complete 511136ea3c5a
+    Download complete bd3399809cf6
+    Download complete 4350b113b173
+    Download complete f282d2dd8f61
+    Download complete f282d2dd8f61
+    Status: Downloaded newer image for moul/go-dl-extract:latest 
+    ---> f282d2dd8f61 
+    Step 1 : MAINTAINER Manfred Touron <m@42.am> (@moul) 
+    ---> Running in b42e3e9b4b28 
+    ---> e5677b73bd71 
+    Removing intermediate container b42e3e9b4b28 
+    Step 2 : RUN --md5=cd5567f945366fd4bda65700d139fbbd http://archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz 
+    ---> Running in 40075a08d812 
+    MD5 checksum: cd5567f945366fd4bda65700d139fbbd (matches) 
+    ---> 2da36da19561 
+    Removing intermediate container 40075a08d812 
+    Step 3 : CMD /bin/bash 
+    ---> Running in e66cd52e3d6c 
+    ---> 6f78f4fe962c 
+    Removing intermediate container e66cd52e3d6c 
+    Successfully built 6f78f4fe962c 
+    
+    The push refers to a repository [armbuild/archlinux-disk] (len: 1) 
+    Sending image list 
+    Pushing repository armbuild/archlinux-disk (1 tags) 
+    511136ea3c5a Pushing 
+    [...]
+    2da36da19561 Pushing [==================================================>] 453.6 MB/453.6 MB
+    2da36da19561 Image successfully pushed 
+    Pushing tag for rev [6f78f4fe962c] on {https://cdn-registry-1.docker.io/v1/repositories/armbuild/archlinux-disk/tags/latest} 
+
 Dependents
 ----------
 
