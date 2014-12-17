@@ -38,3 +38,6 @@ test:	dist/$(TEST_BIN)
 	@echo
 	cp -f dist/ssl.tar dist/$(TEST_BIN) tests/
 	$(MAKE) -C tests/ test BINARY=$(TEST_BIN)
+
+trusted:	trusted/Makefile dist/$(HOST_BIN)
+	$(MAKE) -C trusted/ build
