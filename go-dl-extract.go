@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -22,12 +21,14 @@ var excludes string
 func init() {
 	// flags
 	flag.StringVar(&is_bin_sh, "c", "", "Is $0 /bin/sh ?")
+	// When go-dl-extract is used as a scratch image replacement,
+	// the arguments will looks like $0 -c "..."
 	flag.Parse()
 
-	flag.StringVar(&url, "url", "", "help message for flagname")
-	flag.BoolVar(&verbose, "v", false, "Verbose")
+	flag.StringVar(&url, "url", "", "The URL of the tarball")
+	flag.BoolVar(&verbose, "v", false, "Increase verbosity")
 	flag.StringVar(&dest, "dest", "/", "Destination path")
-	flag.StringVar(&excludes, "excludes",
+	flag.StringVar(&excludes, "Excluded files (separated by a pipe)",
 		"sys|etc/hosts|etc/resolv.conf|proc|etc/hostname", "Excludes")
 	tmptar = "/tmp.tar"
 
@@ -67,26 +68,8 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	f, err := os.Create(tmptar)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	_, err = io.Copy(f, resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	// Extract
-	log.Debugf("Extracting '%s' to '%s'", tmptar, dest)
-	f, err = os.Open(tmptar)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	err = archive.Untar(f, dest, &archive.TarOptions{
+	// Extracting
+	err = archive.Untar(resp.Body, dest, &archive.TarOptions{
 		Excludes: strings.Split(excludes, "|"),
 	})
 	if err != nil {
