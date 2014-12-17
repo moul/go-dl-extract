@@ -16,7 +16,7 @@ Usage
 Context
 -------
 
-The way to create a distribution image is to `ADD` a local tarball to a
+The way to create a distribution/base image is to `ADD` a local tarball to a
 `FROM scratch` Dockerfile.
 
 The way to create a **trusted** ditribution image is to put the tarball in the
@@ -30,13 +30,15 @@ Security note
 -------------
 
 The main advantage to keep the tarball in the Github repository is to create a
-really trusted build that will always give the same result.
+trusted build that will always give the same result and also provides the 
+ability to be analyzed.
+([example](https://github.com/tianon/docker-brew-ubuntu-core/tree/dist/utopic))
 
-We can improve this code by adding :
+`go-dl-extract` will print the tarball checksum and can also do a comparison
+with `--md5=THECHECKSUM`.
 
-- a systematic checksum calculation and printing (that will be kept in the
-Docker trusted build report)
-- an optional checksum argument that will raise an error if the checksums differ
+If the code is using a `-latest.tar.gz` kind of tarball, it is recommended to
+mirror the tarball somewhere and tag the tarball with the today date.
 
 Cross platform
 --------------
@@ -60,8 +62,8 @@ Dependents
 
 - trusted [armbuild/archlinux-disk](https://registry.hub.docker.com/u/armbuild/archlinux-disk/dockerfile/) image
 
-Related links
--------------
+Related discussions on Docker
+-----------------------------
 
 - https://github.com/docker/docker/pull/4193
 - https://github.com/docker/docker/issues/3050
