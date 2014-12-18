@@ -19,5 +19,6 @@ ADD . /go/
 #RUN cd $APP_DIR && GOOS=darwin GOARCH=amd64          godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Darwin-x86_64
 RUN cd $APP_DIR && GOOS=linux  GOARCH=amd64          godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-x86_64
 #RUN cd $APP_DIR && GOOS=linux  GOARCH=386            godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-i386
-#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=5  godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-armel
-#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=6  godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-armhf
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=5  godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-armv5
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=6  godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-armv6
+#RUN cd $APP_DIR && GOOS=linux  GOARCH=arm   GOARM=7  godep go build -a -v -ldflags '-d -w -s' -o /go/bin/go-dl-extract-Linux-armv7
