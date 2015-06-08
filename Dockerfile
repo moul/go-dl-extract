@@ -1,4 +1,4 @@
-FROM golang:1.3-cross
+FROM golang:1.4-cross
 
 ENV CGO_ENABLED 0
 
