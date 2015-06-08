@@ -17,13 +17,13 @@ import (
 var url string
 var verbose bool
 var dest string
-var is_bin_sh string
+var isBinSh string
 var excludes string
-var wanted_checksum string
+var wantedChecksum string
 
 func init() {
 	// flags
-	flag.StringVar(&is_bin_sh, "c", "", "Is $0 /bin/sh ?")
+	flag.StringVar(&isBinSh, "c", "", "Is $0 /bin/sh ?")
 	// When go-dl-extract is used as a scratch image replacement,
 	// the arguments will looks like $0 -c "..."
 	flag.Parse()
@@ -33,10 +33,10 @@ func init() {
 	flag.StringVar(&dest, "dest", "/", "Destination path")
 	flag.StringVar(&excludes, "Excluded files (separated by a pipe)",
 		"sys|etc/hosts|etc/resolv.conf|proc|etc/hostname", "Excludes")
-	flag.StringVar(&wanted_checksum, "md5", "",
+	flag.StringVar(&wantedChecksum, "md5", "",
 		"If set, will raise an error if the checksums differ")
 
-	flag.CommandLine.Parse(strings.Split(is_bin_sh, " "))
+	flag.CommandLine.Parse(strings.Split(isBinSh, " "))
 	if len(flag.Args()) > 0 && len(url) == 0 {
 		url = flag.Args()[0]
 	}
@@ -84,11 +84,11 @@ func main() {
 		panic(err)
 	}
 
-	if len(wanted_checksum) > 0 {
-		if wanted_checksum == fmt.Sprintf("%x", h.Sum(nil)) {
+	if len(wantedChecksum) > 0 {
+		if wantedChecksum == fmt.Sprintf("%x", h.Sum(nil)) {
 			fmt.Printf("MD5 checksum: %x (matches)\n", h.Sum(nil))
 		} else {
-			fmt.Printf("MD5 checksums differ, it is %x and it should be %s\n", h.Sum(nil), wanted_checksum)
+			fmt.Printf("MD5 checksums differ, it is %x and it should be %s\n", h.Sum(nil), wantedChecksum)
 			os.Exit(-1)
 		}
 	} else {
