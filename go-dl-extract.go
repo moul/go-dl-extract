@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/docker/docker/pkg/archive"
+	"github.com/moul/go-dl-extract/vendor/github.com/Sirupsen/logrus"
+	"github.com/moul/go-dl-extract/vendor/github.com/docker/docker/pkg/archive"
 )
 
 var url string
