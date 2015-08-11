@@ -9,9 +9,8 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 	"github.com/docker/docker/pkg/archive"
-	_ "github.com/docker/docker/pkg/units" // Required for godep
 )
 
 var url string
@@ -42,15 +41,15 @@ func init() {
 	}
 
 	// logging
-	log.SetOutput(os.Stderr)
-	//log.SetFormatter(log.TextFormatter)
+	logrus.SetOutput(os.Stderr)
+	//logrus.SetFormatter(logrus.TextFormatter)
 	if verbose {
-		log.SetLevel(log.DebugLevel)
+		logrus.SetLevel(logrus.DebugLevel)
 	} else {
-		log.SetLevel(log.WarnLevel)
+		logrus.SetLevel(logrus.WarnLevel)
 	}
 
-	log.WithFields(log.Fields{
+	logrus.WithFields(logrus.Fields{
 		"verbose": verbose,
 		"url":     url,
 		"dest":    dest,
@@ -65,7 +64,7 @@ func init() {
 //   RUN -v -url={URL}
 func main() {
 	// Download
-	log.Debugf("Downloading '%s'", url)
+	logrus.Debugf("Downloading '%s'", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
@@ -78,7 +77,7 @@ func main() {
 
 	// Extracting
 	err = archive.Untar(t, dest, &archive.TarOptions{
-		Excludes: strings.Split(excludes, "|"),
+		ExcludePatterns: strings.Split(excludes, "|"),
 	})
 	if err != nil {
 		panic(err)
