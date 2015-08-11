@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/moul/go-dl-extract/vendor/github.com/Sirupsen/logrus"
 	"github.com/moul/go-dl-extract/vendor/github.com/docker/docker/pkg/archive"
 )
 
@@ -39,23 +38,6 @@ func init() {
 	if len(flag.Args()) > 0 && len(url) == 0 {
 		url = flag.Args()[0]
 	}
-
-	// logging
-	logrus.SetOutput(os.Stderr)
-	//logrus.SetFormatter(logrus.TextFormatter)
-	if verbose {
-		logrus.SetLevel(logrus.DebugLevel)
-	} else {
-		logrus.SetLevel(logrus.WarnLevel)
-	}
-
-	logrus.WithFields(logrus.Fields{
-		"verbose": verbose,
-		"url":     url,
-		"dest":    dest,
-		"tail":    flag.Args(),
-	}).Debug("Args")
-
 }
 
 // Usage in a Dockerfile:
@@ -64,7 +46,7 @@ func init() {
 //   RUN -v -url={URL}
 func main() {
 	// Download
-	logrus.Debugf("Downloading '%s'", url)
+	fmt.Fprintf(os.Stderr, "Downloading '%s'\n", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
