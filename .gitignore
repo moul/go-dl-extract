@@ -8,3 +8,4 @@ tests/go-dl-extract-*
 tests/ssl.tar
 trusted/*/go-dl-extract-*
 trusted/*/ssl.tar
+go-dl-extract
