@@ -1,5 +1,7 @@
 # go-dl-extract
 
+[![GuardRails badge](https://badges.production.guardrails.io/moul/go-dl-extract.svg)](https://www.guardrails.io)
+
 A static binary that mimics the `ADD and extract` Dockerfile's command for
 remote tarballs.
 
